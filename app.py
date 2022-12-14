@@ -77,7 +77,7 @@ def forward(resource, identifier):
              identifier]), file=_LOGSTREAM, flush=True)
     if resource == 'recount3':
         idies_url = '/'.join(
-                        ['http://idies.jhu.edu/recount3/data', identifier]
+                        ['https://sciserver.org/public-data/recount3/data', identifier]
                     )
         idies_response = requests.head(idies_url)
         if idies_response.status_code == 200:
@@ -87,13 +87,13 @@ def forward(resource, identifier):
         for i in ['2']: # add versions to precede 2 as they are released
             if identifier.startswith(' '.join(['v', i, '/'])):
                 idies_url = '/'.join(
-                            ['http://idies.jhu.edu/recount/data', identifier]
+                            ['https://sciserver.org/public-data/recount2/data', identifier]
                         )
                 idies_response = requests.head(idies_url)
                 if idies_response.status_code == 200:
                     return redirect(idies_url, code=302)
         # v1 is not explicitly versioned
-        idies_url = '/'.join(['http://idies.jhu.edu/recount/data', identifier])
+        idies_url = '/'.join(['https://sciserver.org/public-data/recount2/data', identifier])
         idies_response = requests.head(idies_url)
         if idies_response.status_code == 200:
             return redirect(idies_url, code=302)
