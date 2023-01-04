@@ -2,9 +2,7 @@
 """
 duffel.py
 
-Flask app for routing to Rail outputs on various hosts. Currently supports only
-Amazon Cloud Drive. Requires https://github.com/yadayada/acd_cli is authorized
-and set up as owner of shared directory.
+Flask app for routing to Rail/Monorail outputs on various hosts.
 """
 from flask import Flask, redirect, render_template, abort, request, Response
 from contextlib import closing
@@ -77,7 +75,7 @@ def forward(resource, identifier):
              identifier]), file=_LOGSTREAM, flush=True)
     if resource == 'recount3':
         idies_url = '/'.join(
-                        ['https://sciserver.org/public-data/recount3/data', identifier]
+                        ['https://recount-opendata.s3.amazonaws.com/recount3/release', identifier]
                     )
         idies_response = requests.head(idies_url)
         if idies_response.status_code == 200:
