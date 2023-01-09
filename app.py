@@ -74,14 +74,9 @@ def forward(resource, identifier):
              resource,
              identifier]), file=_LOGSTREAM, flush=True)
     if resource == 'recount3':
-        if identifier.endswith('.bw'):
-            idies_url = '/'.join(
-                        ['https://sciserver.org/public-data/recount3/data', identifier]
-                    )
-        else:
-            idies_url = '/'.join(
-                        ['https://recount-opendata.s3.amazonaws.com/recount3/release', identifier]
-                    )
+        idies_url = '/'.join(
+                    ['https://recount-opendata.s3.amazonaws.com/recount3/release', identifier]
+                )
         idies_response = requests.head(idies_url)
         if idies_response.status_code == 200:
             return redirect(idies_url, code=302)
