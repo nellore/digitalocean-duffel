@@ -85,13 +85,13 @@ def forward(resource, identifier):
         for i in ['2']: # add versions to precede 2 as they are released
             if identifier.startswith(' '.join(['v', i, '/'])):
                 idies_url = '/'.join(
-                            ['https://sciserver.org/public-data/recount2/data', identifier]
+                            ['https://recount-opendata.s3.amazonaws.com/recount2', identifier]
                         )
                 idies_response = requests.head(idies_url)
                 if idies_response.status_code == 200:
                     return redirect(idies_url, code=302)
         # v1 is not explicitly versioned
-        idies_url = '/'.join(['https://sciserver.org/public-data/recount2/data', identifier])
+        idies_url = '/'.join(['https://recount-opendata.s3.amazonaws.com/recount2', identifier])
         idies_response = requests.head(idies_url)
         if idies_response.status_code == 200:
             return redirect(idies_url, code=302)
