@@ -2,6 +2,28 @@
 
 Duffel creates permalinks to real locations of data resources and logs accesses. It is used by recount2 and was originally hosted on webfaction using the code at https://github.com/nellore/duffel. After webfaction was eaten by godaddy, the host was switched to digitalocean. This is a fork of the digitalocean sample Flask app incorporating Duffel's code. The sample Flask app's readme is below.
 
+## What Duffel logs (privacy)
+
+Duffel exists to create permalinks and to report *aggregate* usage of recount2/recount3. It is designed not to store anything that identifies a person or machine:
+
+* **No IP addresses.** Each log line carries a pseudonym: HMAC-SHA256 of the client IP, keyed with a secret that lives only on the server (`~/recount2_logs/duffel_secret`, created automatically with mode 600, or the `DUFFEL_LOG_SECRET` environment variable). The secret is never committed. Without it, pseudonyms cannot be matched against candidate IPs.
+* **Yearly rotation.** The secret is mixed with the calendar year, so a pseudonym is stable within a year (enabling unique visitors per day/week/month/year) but cannot be linked across years.
+* **Date only.** Lines record the UTC date, never the time of day.
+* **No probe strings.** Only requests that resolve to a real file have their path logged; everything else is logged with `-` in place of the path.
+* **Retention.** Set `DUFFEL_LOG_RETENTION_DAYS=N` to delete log files older than N days at startup (default: keep all).
+
+Log line format:
+
+    YYYY-MM-DD [TAB] pseudonym [TAB] resource [TAB] path
+
+To compute hits and unique visitors (standard library only):
+
+    python analytics.py --by month ~/recount2_logs/recount_log.*.tsv.gz
+    python analytics.py --by year ~/recount2_logs/recount_log.*.tsv.gz
+    python analytics.py --by day --resource recount3 ~/recount2_logs/recount_log.*.tsv.gz
+
+Deleting `duffel_secret` makes every existing pseudonym permanently unmatchable; do this if the logs are ever shared beyond the maintainers.
+
 # Getting Started #
 
 These steps will get this sample Flask application running for you using DigitalOcean.
