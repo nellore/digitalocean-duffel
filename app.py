@@ -26,7 +26,7 @@ Duffel logs one line per successful redirect:
 
 See analytics.py for computing hit/unique-visitor counts from these logs.
 """
-from flask import Flask, redirect, render_template, abort, request, Response
+from flask import Flask, redirect, abort, request
 import requests
 import gzip
 import atexit
